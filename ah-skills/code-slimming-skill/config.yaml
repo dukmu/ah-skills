@@ -1,0 +1,98 @@
+skill:
+  name: code-slimming-skill
+  version: 0.1.0
+
+defaults:
+  mode: audit
+  max_risk_to_apply: L2
+  preserve_behavior: true
+  stop_on_validation_failure: true
+  require_baseline_before_apply: true
+
+protected_paths:
+  - "**/migrations/**"
+  - "**/migration/**"
+  - "**/schema/**"
+  - "**/*.proto"
+  - "**/*.avsc"
+  - "**/openapi*.yaml"
+  - "**/openapi*.json"
+  - "**/swagger*.yaml"
+  - "**/swagger*.json"
+  - "**/generated/**"
+  - "**/__generated__/**"
+  - "**/vendor/**"
+  - "**/third_party/**"
+  - "**/tests/**"
+  - "**/test/**"
+  - "**/*.snap"
+
+protected_surfaces:
+  - public_api
+  - cli_flags
+  - config_keys
+  - env_vars
+  - db_schema
+  - network_protocol
+  - serialization_format
+  - error_codes
+  - log_format_if_consumed
+  - plugin_entrypoints
+
+dynamic_reference_patterns:
+  - importlib
+  - getattr
+  - setattr
+  - globals()
+  - locals()
+  - eval
+  - exec
+  - registry
+  - decorator_registration
+  - cli_discovery
+  - plugin_loader
+  - reflection
+  - dependency_injection
+  - framework_routes
+  - pytest_fixtures
+  - celery_tasks
+  - airflow_dags
+  - entry_points
+  - service_loader
+
+validation_commands:
+  python:
+    - "python -m pytest"
+    - "python -m compileall ."
+    - "python -m mypy ."
+    - "python -m ruff check ."
+  node:
+    - "npm test"
+    - "npm run typecheck"
+    - "npm run lint"
+    - "npm run build"
+  rust:
+    - "cargo test"
+    - "cargo clippy --all-targets --all-features"
+    - "cargo build"
+  go:
+    - "go test ./..."
+    - "go vet ./..."
+  java:
+    - "./gradlew test"
+    - "./gradlew build"
+  generic:
+    - "make test"
+    - "make lint"
+    - "make build"
+
+metrics:
+  collect:
+    - loc
+    - file_count
+    - dependency_count
+    - public_api_changed
+    - tests_passing
+    - build_status
+    - cyclomatic_complexity_if_available
+    - duplicate_blocks_if_available
